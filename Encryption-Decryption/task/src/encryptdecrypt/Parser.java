@@ -1,7 +1,6 @@
 package encryptdecrypt;
 
-        import java.util.HashMap;
-        import java.util.Map;
+        import java.util.*;
 
 
 public class Parser {
@@ -10,17 +9,16 @@ public class Parser {
 
     public Parser(String ...  options){
         this.options=options;
-        this.map=new HashMap<>();
+                this.map=new HashMap<>();
     }
 
     public void parse(String[]   line){
 
-
         for(String option : options){
-           String[] values = option.split(" ");
-           String key = values[0];
+            String[] values = option.split(" ");
+            String key = values[0];
 
-           String defaultValue = values.length == 1 ? "" : values[1];
+            String defaultValue = values.length == 1 ? "" : values[1];
 
             int i = 0;
 
@@ -29,12 +27,9 @@ public class Parser {
                 String item = line[i];
                 String value;
                 if (item.startsWith("-") && item.endsWith(key)){
-                    if (!line[i+1].startsWith("-")){
-
+                    value = defaultValue;
+                    if (i < line.length-1 && !line[i+1].startsWith("-")){
                         value = line[i+1];
-                    }
-                    else {
-                        value = defaultValue;
                     }
                     map.put(key,value);
                     break;
@@ -49,6 +44,19 @@ public class Parser {
 
     public String getValue(String label){
         return map.getOrDefault(label , "option invalid");
+    }
+
+    public String getValueOrDefault(String label, String defaultValue){
+        if (isPresent(label)){
+            return getValue(label);
+        }
+        else{
+            return defaultValue;
+        }
+    }
+
+    public boolean isPresent(String key){
+        return map.containsKey(key);
     }
 
 }
