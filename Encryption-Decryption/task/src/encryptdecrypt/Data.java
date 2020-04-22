@@ -39,7 +39,8 @@ public class Data {
               writer.write(code);
           }
           catch (IOException e){
-              System.out.println("error file");
+
+              System.out.println(e.getMessage());
           }
 
         }

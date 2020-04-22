@@ -1,7 +1,7 @@
 package encryptdecrypt;
 
 public class Shift extends Algoritm {
-    private final String alphabet = "abcdefghijklmnoprstuvwxyz";
+    private final String alphabet = "abcdefghijklmnopqrstuvwxyz";
 
     @Override
     public char shift(int key, char letter) {

@@ -1,25 +1,23 @@
 package encryptdecrypt;
 
-import java.util.Optional;
+import javax.swing.*;
+import java.util.*;
 
 public class Cypher {
     private Parser   parser;
-    private  Algoritm algorithm;
+    private  AlgorithmContext ctx;
     private Data dataManager;
-    
+
     
     
     public Cypher(String ... options){
+
         parser = new Parser(options);
-        algorithm = new Unicode();//default algorithme
+        ctx = new AlgorithmContext();//default algorithme
         dataManager = new Data();
+
+
     }
-
-
-    public void setAlgorithme(Algoritm algorithm){
-        this.algorithm= algorithm;
-    }
-
 
     public void setArgs(String[] args){
         parser.parse(args);
@@ -28,13 +26,16 @@ public class Cypher {
 
     public void transform() {
         try {
+
             String code = parser.getValueOrDefault("mode", "enc");
             String text = parser.getValueOrDefault("data", "");
             int key = Integer.parseInt(parser.getValueOrDefault("key", "0"));
 
+            String algorithme = parser.getValueOrDefault("alg","shift");
 
+            ctx.select(algorithme);
 
-           dataManager = new Data();
+            dataManager = new Data();
 
             if (parser.isPresent("data")) {
                 dataManager.setData(parser.getValueOrDefault("data", ""));
@@ -48,14 +49,15 @@ public class Cypher {
 
             switch(code){
                 case "enc":
-                    dataManager.print(algorithm.code(key,dataManager.getData()));
+                    dataManager.print(ctx.getAlgoritm().code(key,dataManager.getData()));
                     break;
                 case"dec":
-                    dataManager.print(algorithm.decode(key,dataManager.getData()));
+                    dataManager.print(ctx.getAlgoritm().decode(key,dataManager.getData()));
                     break;
             }
         }
         catch (Exception e){
+            e.printStackTrace();
             System.out.println("error file");
         }
 
